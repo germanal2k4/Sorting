@@ -56,7 +56,8 @@ template <class T>
 class bin_injection_sort{
 public:
     void bin_injection(vector<T>& a){
-        int i; int  j; T selected;
+        int i; int  j;
+        T selected;
         int loc;
         for (i = 1; i < a.size(); ++i)
         {
@@ -326,6 +327,20 @@ void insert_timer(){
     if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
     else cout << ' '<< "unsorted" << endl;
 
+    a.resize(1000);
+    cnt = 0;
+    cout << a.size() << ' ';
+    for(int i = 0; i < 200; i++) {
+        for(int j = 0; j < a.size() - 1; j++) a[j] = distrib1(generator);
+        auto c_start =  chrono::high_resolution_clock::now();
+        b.injection(a);
+        auto c_end =  chrono::high_resolution_clock::now();
+        cnt +=  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count();
+    }
+    cout << (double)cnt/double(200) << ' ';
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
 }
 void merge_timer_for_inj_comp(){
      random_device read;
@@ -418,6 +433,20 @@ void merge_timer_for_inj_comp(){
     else cout << ' '<< "unsorted" << endl;
 
     a.resize(500);
+    cnt = 0;
+    cout << a.size() << ' ';
+    for(int i = 0; i < 200; i++) {
+        for(int j = 0; j < a.size() - 1; j++) a[j] = distrib1(generator);
+        auto c_start =  chrono::high_resolution_clock::now();
+        b.executer(a);
+        auto c_end =  chrono::high_resolution_clock::now();
+        cnt +=  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count();
+    }
+    cout << (double)cnt/double(200) << ' ';
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(1000);
     cnt = 0;
     cout << a.size() << ' ';
     for(int i = 0; i < 200; i++) {
@@ -1402,7 +1431,7 @@ void reversed_list_timer(){
 }
 
 int main(){
-    //insert_timer();
+    insert_timer();
     //merge_timer_for_inj_comp();
     //qsort_timer();
     //merge_timer();
