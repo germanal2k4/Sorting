@@ -223,6 +223,173 @@ public:
         a.erase(a.begin());
     }
 };
+struct node {
+        int value;
+        node **righ;
+        node(int lvl, int &val) {
+            righ = new node *[lvl + 1];
+            memset(righ, 0, sizeof(node *) * (lvl + 1));
+            this->value = val;
+        }
+    };
+
+    struct skip_list {
+        node *main;
+        int val;
+        int point;
+        skip_list() {
+            main = new node(highest, val);
+            point = 0;
+        }
+
+        void insert(int &);
+
+        void printer(vector<int> &a);
+    };
+
+void skip_list::insert(int &res) {
+        node *x = main;
+        node *alst[highest + 1];
+        memset(alst, 0, sizeof(node *) * (highest + 1));
+        random_device read;
+        mt19937 generator(read());
+        uniform_int_distribution<int> distrib1(0, highest);
+        for (int i = point; i >= 0; i--) {
+            while (x->righ[i] != NULL && x->righ[i]->value < res) {
+                x = x->righ[i];
+            }
+            alst[i] = x;
+        }
+        x = x->righ[0];
+        if (x == NULL || x->value != res) {
+            int lvl = distrib1(generator);
+            if (lvl > point) {
+                for (int i = point + 1; i <= lvl; i++) {
+                    alst[i] = main;
+                }
+                point = lvl;
+            }
+            x = new node(lvl, res);
+            for (int i = 0; i <= lvl; i++) {
+                x->righ[i] = alst[i]->righ[i];
+                alst[i]->righ[i] = x;
+            }
+        }
+    }
+    void skip_list::printer(vector<int>& a) {
+        const node *x = main->righ[0];
+        int i = 0;
+        while (x != NULL) {
+            a[i] =  x->value;
+            x = x->righ[0];
+            i++;
+        }
+    }
+void skip_timer(){
+    random_device read;
+    mt19937 generator(read());
+    uniform_int_distribution<int> distrib1(INT_MIN, INT_MAX);
+    cout << '\n' << "Skip_list" << '\n';
+    vector<int> a(1000, 0);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    skip_list b;
+    auto c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    auto c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ';
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(3000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ';
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(10000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ' ;
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(30000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ' ;
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(50000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ' ;
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(100000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ' ;
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(300000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ' ;
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(500000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ' ;
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+
+    a.resize(1000000);
+    cout << a.size() << ' ';
+    for(int i = 0; i < a.size() - 1; i++) a[i] = distrib1(generator);
+    c_start =  chrono::high_resolution_clock::now();
+    for(int i = 0; i < a.size(); i++) b.insert(a[i]);
+    c_end =  chrono::high_resolution_clock::now();
+    cout <<  chrono::duration_cast< chrono::nanoseconds>(c_end - c_start).count() << ' ' ;
+    b.printer(a);
+    if(is_sorted(a.begin(), a.end())) cout<< ' ' << "sorted" << endl ;
+    else cout << ' '<< "unsorted" << endl;
+}
 void insert_timer(){
      random_device read;
      mt19937 generator(read());
@@ -1442,6 +1609,6 @@ int main(){
     //string_timer_1200();
     //string_timer_3000();
     //string_timer_10000();
-    //skip_timer
+    //skip_timer();
     //reversed_list_timer();
 }
