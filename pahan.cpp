@@ -5,7 +5,7 @@
 #include<chrono>
 #include "limits.h"
 using namespace std;
-
+#define highest 12
 class merge_sort{
 public:
     void executer(vector<int>& a){
@@ -126,46 +126,51 @@ private:
     int select(vector<int>& a, int l, int r){
         if(r - l < 5){
             for (int i = l + 1; i < r; ++i) {
-                int tmp = a[i];
-                int j;
-                for (j = i - 1; j >= l && a[j] > tmp; --j)
-                    a[j + 1] = a[j];
-                a[j + 1] = tmp;
+                int it;
+                int res = a[i];
+                for (it = i - 1; it >= l && a[it] > res; --it)
+                    a[it + 1] = a[it];
+                a[it + 1] = res;
             }
-            return a[(l+r)/2];
+            return (l+r)/2;
         }
         for(int i = l; i  + 4 < r; i+=5){
-            if (a[i + 4] < a[i])
-                 swap(a[i + 4], a[i]);
             if (a[i + 3] < a[i + 1])
                  swap(a[i + 3], a[i + 1]);
-            if (a[i + 1   ] < a[i]) {
-                 swap(a[i + 1], a[i]);
-                 swap(a[i + 4], a[i + 3]);
+            if ( a[i] > a[i+4]) {
+                swap(a[i + 4], a[i]);
             }
-            if (a[i + 2] < a[i + 1]) {
+            if (a[i] > a[i+1]) {
+                swap(a[i + 1], a[i]);
+                swap(a[i + 4], a[i + 3]);
+            }
+            if ( a[i + 2] > a[i + 3]) {
+                swap(a[i + 3], a[i + 2]);
+            }
+            else if (a[i + 1] > a[i+2]) {
                 int temp = a[i + 2];
                 a[i + 2] = a[i + 1];
-                if (temp < a[i])
-                     swap(temp, a[i]);
+                if (temp < a[i]) {
+                    swap(temp, a[i]);
+                }
                 a[i + 1] = temp;
-            } else if (a[i + 3] < a[i + 2])
-                 swap(a[i + 3], a[i + 2]);
-            if (a[i + 4] < a[i + 2]) {
+            }
+            if (a[i + 2] > a[i + 4]) {
                 int x = a[i + 4];
                 a[i + 4] = a[i + 3];
                 a[i + 3] = a[i + 2];
-                if (x < a[i + 1]) {
+                if (x >= a[i + 1]) {
+                    a[i + 2] = x;
+                }
+                else {
                     a[i + 2] = a[i + 1];
                     a[i + 1] = x;
                 }
-                else
-                    a[i + 2] = x;
             }
             else if (a[i + 4] < a[i + 3])
                  swap(a[i + 4], a[i + 3]);
         }
-        return a[l + 2 + 5 * (((r - l) / 5) / 2)];
+        return l + 2 + 5 * (((r - l) / 5) / 2); //медиана всех медиан
     }
 public:
     void q_sorter(vector<int>& a, int l, int r){
@@ -174,7 +179,8 @@ public:
         }
         int i = l;
         int j = r;
-        int op_1 = select(a, l, r);
+        int op = select(a, l, r);
+        int op_1 = a[op];
         while(i <= j){
             while(a[i] < op_1){
                 i++;
@@ -196,7 +202,6 @@ private:
 
         int left = 2 * current;
         int right = 2 * current + 1;
-
         if (left < size && a[left] > a[root]) {
             root = left;
         }
@@ -211,19 +216,17 @@ private:
     }
 public:
     void heap_sort(vector<int>& a) {
-        a.push_back(a[0]);
-        for (int i = a.size() / 2; i > 0 ; --i)
+        for (int i = a.size() / 2; i >= 0 ; i--) {
             heapify(a, a.size(), i);
-
-        for (int i = a.size() - 1; i > 1; --i)
-        {
-            swap(a[1], a[i]);
-            heapify(a, i, 1);
         }
-        a.erase(a.begin());
+        for (int i = a.size() - 1; i >= 1; --i)
+        {
+            swap(a[0], a[i]);
+            heapify(a, i, 0);
+        }
     }
 };
-struct node {
+    struct node {
         int value;
         node **righ;
         node(int lvl, int &val) {
@@ -247,7 +250,7 @@ struct node {
         void printer(vector<int> &a);
     };
 
-void skip_list::insert(int &res) {
+    void skip_list::insert(int &res) {
         node *x = main;
         node *alst[highest + 1];
         memset(alst, 0, sizeof(node *) * (highest + 1));
@@ -1598,7 +1601,7 @@ void reversed_list_timer(){
 }
 
 int main(){
-    insert_timer();
+    //insert_timer();
     //merge_timer_for_inj_comp();
     //qsort_timer();
     //merge_timer();
@@ -1611,4 +1614,5 @@ int main(){
     //string_timer_10000();
     //skip_timer();
     //reversed_list_timer();
+
 }
